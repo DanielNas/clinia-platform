@@ -4,7 +4,7 @@ services:
   api:
     container_name: clinia_api
     build: ./backend
-    command: npm run start:dev
+    command: npm run start
     volumes:
       - ./backend:/app
     ports:
