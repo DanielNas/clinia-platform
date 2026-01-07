@@ -1,18 +1,21 @@
-import express from "express";
-import authRoutes from "./modules/auth/auth.routes.js";
-import clinicRoutes from "./modules/clinic/clinic.routes.js";
-import patientsRoutes from "./modules/patient/patient.routes.js";
 
+const express = require('express');
 const app = express();
 
+// recebe o JSON no body
 app.use(express.json());
 
-app.use("/auth", authRoutes);
-app.use("/clinic", clinicRoutes);
-app.use("/patients", patientsRoutes);
+// importa as rotas de usuários
+const usersRoutes = require('./routes/users.routes');
+// define o prefixo/users
+app.use('/users', usersRoutes);
 
-app.get("/", (req, res) => {
-  res.send("Clinia API OK");
-});
+// rotas não encontradas (sempre depois das rotas)
+const notFound = require('./middlewares/notFound.middleware');
+app.use(notFound)
 
-export default app;
+// erros globais (sempre por último)
+const errorHandler = require('./middlewares/errorHandler.middleware');
+app.use(errorHandler);
+
+module.exports = app;

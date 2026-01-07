@@ -5,53 +5,20 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
-model Clinic {
-  id        String   @id @default(uuid())
-  name      String
-  createdAt DateTime @default(now())
-
-  users    User[]
-  patients Patient[] // Relação inversa com a tabela de pacientes
-}
-
-// usuários
 model User {
-  id       String   @id @default(uuid())
-  name     String
-  email    String   @unique
-  password String
-  role     UserRole @default(ADMIN)
-
-  clinicId String
-  clinic   Clinic @relation(fields: [clinicId], references: [id])
-
+  id        String   @id @default(uuid())
+  name      String   @db.VarChar(255)
+  email     String   @unique @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  role      String?
   createdAt DateTime @default(now())
-}
-
-// Módulo de pacientes
-model Patient {
-  id        String    @id @default(uuid())
-  name      String
-  email     String?
-  phone     String?
-  birthDate DateTime?
-  createdAt DateTime  @default(now())
-
-  clinicId String
-  clinic   Clinic @relation(fields: [clinicId], references: [id])
-
-  @@map("patients")
-}
-
-enum UserRole {
-  ADMIN
-  PROFESSIONAL
+  updatedAt DateTime @updatedAt
 }
