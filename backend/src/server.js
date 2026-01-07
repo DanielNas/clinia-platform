@@ -1,8 +1,7 @@
-const app = require('./app');
+import app from "./app.js";
 
 const PORT = 3000;
 
-// inicia o servidor
 app.listen(PORT, () => {
-    console.log('Clinia APP rodando na porta ${PORT}')
+  console.log(`🚀 Clinia API rodando na porta ${PORT}`);
 });
