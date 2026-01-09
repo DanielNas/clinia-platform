@@ -2,6 +2,10 @@ import prisma from "../../lib/prisma.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+/**
+ * Registro de clínica + usuário admin
+ */
+
 export async function register(req, res) {
     const { clinicName, name, email, password } = req.body;
 
@@ -26,9 +30,21 @@ export async function register(req, res) {
             message: "Clínica criada com sucesso",
         });
     } catch (error) {
-        return res.status(400).json({ error: error.message });
+        if (error.code === "P2002") {
+            return res.status(409).json( {
+                error: "Email já cadastrado",
+            });
+        }
+        
+        return res.status(500).json({ 
+            error: "Erro interno ao criar cínica",
+         });
     }
 }
+
+/**
+ * Registro de clínica + usuário admin
+ */
 
 export async function login(req, res) {
     const { email, password } = req.body;
@@ -58,4 +74,11 @@ export async function login(req, res) {
     );
 
     return res.json({ token });
+}
+
+/**
+ * Retorna dados do usuário logado
+ */
+export async function me(req, res) {
+  return res.json(req.user);
 }
